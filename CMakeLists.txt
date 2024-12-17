@@ -42,7 +42,5 @@ add_executable(${PROJECT_NAME}
   ${HEADER_FILES}
 )
 
-
 # Link against OpenGL and GLFW
-# target_link_libraries(${PROJECT_NAME} ${OpenGL_LIBRARIES} ${glfw3_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${OpenGL_LIBRARIES} glfw glm::glm)

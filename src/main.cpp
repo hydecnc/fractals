@@ -57,8 +57,7 @@ int main() {
   // glEnable(GL_DEPTH_TEST);
 
   // build and compile shaders
-  const std::string shader_path{
-      "/home/hyde/dev/projects/cpp/fractals_opengl/src/shaders/"};
+  const std::string shader_path{"/home/voidy/dev/cpp/Fractals/src/shaders/"};
   Shader ourShader{(shader_path + "shader.vert").c_str(),
                    (shader_path + MODE + ".frag").c_str()};
 
