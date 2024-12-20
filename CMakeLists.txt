@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.30)
 project(Fractals VERSION 1.0)
 
 # Generate complie commands
@@ -8,39 +8,45 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Include directories
-include_directories(include)
-
-# Find OpenGL Package
-find_package(OpenGL REQUIRED)
-
-# Find GLFW Package
-find_package(glfw3 REQUIRED)
-
-# Find glm Package
-find_package(glm REQUIRED)
+# Create an option to switch between a system sdl Library and a vendored SDL Library
+# option(FRACTALS_VENDORED "Use vendored libraries" OFF)
+#
+# if(FRACTALS_VENDORED)
+#   add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
+# else()
+#   find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
+# endif()
 
 # Get all header files
 set(HEADER_FILES
-  src/shader_s.h
+  # src/shader_s.h
 )
 
 # Get all source files
 set(SOURCE_FILES
-  src/main.cpp
-  src/glad.c
+  src/main.c
 )
 
-# Add the source files
-include_directories(
-  ${OpenGL_INCLUDE_DIRS}
-  ${glfw3_INCLUDE_DIRS}
-)
-
+# Create executable
 add_executable(${PROJECT_NAME}
   ${SOURCE_FILES}
   ${HEADER_FILES}
 )
 
-# Link against OpenGL and GLFW
-target_link_libraries(${PROJECT_NAME} ${OpenGL_LIBRARIES} glfw glm::glm)
+# Emscripten-specific settings
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Emscripten")
+  # set(CMAKE_EXECUTABLES_SUFFIX ".html")
+  # target_link_options(${PROJECT_NAME} PRIVATE --preload-file .)
+  set(USE_FLAGS "-s USE_SDL=2 -o main.html")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS}")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS}")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS}")
+  set(CMAKE_EXECUTABLE_SUFFIX .html)
+  # target_link_options(${PROJECT_NAME} PRIVATE -sUSE_SDL=2)
+else()
+  find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
+endif()
+target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES})
+
+
