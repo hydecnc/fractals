@@ -1,2 +1,1 @@
-# Mandelbrot & Julia Fractals Explorer
-Created using glfw & opengl
+# Fractals Explorer created using threejs
