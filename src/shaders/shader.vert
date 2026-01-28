@@ -1,6 +1,6 @@
 // VERTEX SHADER
 #version 330 core
-layout(location = 0) in vec3 aPos;
+layout(location = 0) in vec2 aPos;
 
 out vec2 FracCoord;
 
@@ -9,11 +9,11 @@ uniform vec2 center;
 
 void main()
 {
-    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    gl_Position = vec4(aPos.x, aPos.y, 0.0f, 1.0f);
 
     // set appropriate range for fractal rendering
-    float FracX = aPos.x * 2.5 - 0.5;
-    float FracY = aPos.y * 2;
+    float FracX = aPos.x * 2.0f - 1.0f;
+    float FracY = aPos.y * 2.0f - 1.0f;
     if (zoom != 0) {
       FracX = FracX / zoom + center.x;
       FracY = FracY / zoom + center.y;

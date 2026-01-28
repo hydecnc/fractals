@@ -29,8 +29,15 @@ float zoom{1.0f};
 float ZOOM_SPEED{1.0f};
 
 int main() {
+  if (glfwPlatformSupported(GLFW_PLATFORM_WAYLAND)) {
+    glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
+  } else {
+    std::cout << "No Wayland Support\n";
+  }
+
   // glfw initialization
   glfwInit();
+  glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -53,6 +60,11 @@ int main() {
     return -1;
   }
 
+  // Set correct viewport size
+  int fbWidth{}, fbHeight{};
+  glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
+  glViewport(0, 0, fbWidth, fbHeight);
+
   // configure global opengl state
   // glEnable(GL_DEPTH_TEST);
 
@@ -64,10 +76,10 @@ int main() {
 
   const float vertices[]{
       // x, y, z
-      1.0f,  1.0f,  0.0f, // top right
-      1.0f,  -1.0f, 0.0f, // bottom right
-      -1.0f, -1.0f, 0.0f, // bottom left
-      -1.0f, 1.0f,  0.0f, // top left
+      1.0f,  1.0f,  // top right
+      1.0f,  -1.0f, // bottom right
+      -1.0f, -1.0f, // bottom left
+      -1.0f, 1.0f,  // top left
   };
 
   const unsigned int indices[]{
@@ -91,7 +103,7 @@ int main() {
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
                GL_STATIC_DRAW);
   // set vertex attrib pointers
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
   glEnableVertexAttribArray(0);
 
   // activate shaders & set uniforms
@@ -115,8 +127,8 @@ int main() {
 
     // activate shaders & update uniforms
     ourShader.use();
-    zoom *= std::exp(deltaTime * ZOOM_SPEED);
-    ourShader.setFloat("zoom", zoom);
+    // zoom *= std::exp(deltaTime * ZOOM_SPEED);
+    // ourShader.setFloat("zoom", zoom);
 
     // draw elements
     glBindVertexArray(VAO);
