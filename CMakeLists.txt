@@ -29,21 +29,16 @@ include_directories(
   ${glfw3_INCLUDE_DIRS}
 )
 
-# Get all header files
-set(HEADER_FILES
-  src/shader_s.h
-)
-
 # Get all source files
 set(SOURCE_FILES
   src/main.cpp
+  src/canvas.cpp
   src/glad.c
 )
 
 # Add the source files
 add_executable(${PROJECT_NAME}
   ${SOURCE_FILES}
-  ${HEADER_FILES}
 )
 
 # Link against OpenGL and GLFW

@@ -1,7 +1,9 @@
 // clang-format off
+#include "canvas.h"
 #include "shader_s.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "configuration.h"
 
 #include <glm/fwd.hpp>
 #include <iostream>
@@ -13,9 +15,6 @@
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
 // settings
-const unsigned int SCR_WIDTH{800};
-const unsigned int SCR_HEIGHT{600};
-const unsigned int MAX_ITER{100};
 const glm::vec2 JULIA_CONSTANT{-0.4f, 0.6f};
 const glm::vec2 CENTER{-0.1011f, 0.9563f};
 const std::string MODE{"mandelbrot"};
@@ -44,7 +43,7 @@ int main() {
 
   // window setup
   GLFWwindow *window{
-      glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "FractalsGL", NULL, NULL)};
+      glfwCreateWindow(conf::kWidth, conf::kHeight, "FractalsGL", NULL, NULL)};
   if (window == NULL) {
     std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();
@@ -71,48 +70,22 @@ int main() {
   // build and compile shaders
   const std::string shader_path{PROJECT_DIR};
   std::cout << shader_path << '\n';
-  Shader ourShader{(shader_path + "/src/shaders/shader.vert").c_str(),
-                   (shader_path + "/src/shaders/" + MODE + ".frag").c_str()};
+  Shader shader{(shader_path + "/src/shaders/shader.vert").c_str(),
+                (shader_path + "/src/shaders/" + MODE + ".frag").c_str()};
 
-  const float vertices[]{
-      // x, y, z
-      1.0f,  1.0f,  // top right
-      1.0f,  -1.0f, // bottom right
-      -1.0f, -1.0f, // bottom left
-      -1.0f, 1.0f,  // top left
-  };
-
-  const unsigned int indices[]{
-      0, 1, 3, 1, 2, 3,
-  };
-
-  unsigned int VBO, VAO, EBO;
-
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &VBO);
-  glGenBuffers(1, &EBO);
-
-  // bind VAO
-  glBindVertexArray(VAO);
-
-  // copy vertices array to VBO for opengl
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  // copy indices array to EBO for opengl
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
-               GL_STATIC_DRAW);
-  // set vertex attrib pointers
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
-  glEnableVertexAttribArray(0);
+  Canvas canvas{};
+  canvas.setupBuffers();
 
   // activate shaders & set uniforms
-  ourShader.use();
-  ourShader.setInt("max_iter", MAX_ITER);
-  ourShader.setFloat("zoom", zoom);
-  ourShader.setVec2("center", CENTER);
+  shader.use();
+  constexpr float aspect_ratio{static_cast<float>(conf::kWidth) /
+                               static_cast<float>(conf::kHeight)};
+  shader.setFloat("aspect_ratio", aspect_ratio);
+  shader.setInt("max_iter", conf::kMaxIteration);
+  shader.setFloat("zoom", zoom);
+  shader.setVec2("center", CENTER);
   if (MODE == "julia") {
-    ourShader.setVec2("julia_constant", JULIA_CONSTANT);
+    shader.setVec2("julia_constant", JULIA_CONSTANT);
   }
 
   while (!glfwWindowShouldClose(window)) {
@@ -126,22 +99,17 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     // activate shaders & update uniforms
-    ourShader.use();
+    shader.use();
     // zoom *= std::exp(deltaTime * ZOOM_SPEED);
     // ourShader.setFloat("zoom", zoom);
 
     // draw elements
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    canvas.draw();
 
     // swap buffers & poll events
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
-
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteBuffers(1, &VBO);
-  glDeleteBuffers(1, &EBO);
 
   // terminate glfw
   glfwTerminate();
