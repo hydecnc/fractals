@@ -18,6 +18,7 @@ else()
   find_package(glm REQUIRED)
 endif()
 
+add_compile_definitions(PROJECT_DIR="${CMAKE_SOURCE_DIR}")
 
 # Find OpenGL Package
 find_package(OpenGL REQUIRED)
@@ -46,4 +47,4 @@ add_executable(${PROJECT_NAME}
 )
 
 # Link against OpenGL and GLFW
-target_link_libraries(${PROJECT_NAME} ${OpenGL_LIBRARIES} glfw glm::glm)
+target_link_libraries(${PROJECT_NAME} OpenGL::GL glfw glm::glm)

@@ -57,9 +57,10 @@ int main() {
   // glEnable(GL_DEPTH_TEST);
 
   // build and compile shaders
-  const std::string shader_path{"/home/voidy/dev/cpp/Fractals/src/shaders/"};
-  Shader ourShader{(shader_path + "shader.vert").c_str(),
-                   (shader_path + MODE + ".frag").c_str()};
+  const std::string shader_path{PROJECT_DIR};
+  std::cout << shader_path << '\n';
+  Shader ourShader{(shader_path + "/src/shaders/shader.vert").c_str(),
+                   (shader_path + "/src/shaders/" + MODE + ".frag").c_str()};
 
   const float vertices[]{
       // x, y, z
