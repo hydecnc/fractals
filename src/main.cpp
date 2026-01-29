@@ -1,5 +1,6 @@
 // clang-format off
 #include "canvas.h"
+#include "glm/ext/matrix_clip_space.hpp"
 #include "shader_s.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -7,7 +8,6 @@
 
 #include <glm/fwd.hpp>
 #include <iostream>
-// #include <utility>
 #include <glm/vec2.hpp>
 // clang-format on
 
@@ -42,8 +42,8 @@ int main() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   // window setup
-  GLFWwindow *window{
-      glfwCreateWindow(conf::kWidth, conf::kHeight, "FractalsGL", NULL, NULL)};
+  GLFWwindow *window{glfwCreateWindow(conf::kScrWidth, conf::kScrHeight,
+                                      "FractalsGL", NULL, NULL)};
   if (window == NULL) {
     std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();
@@ -64,12 +64,10 @@ int main() {
   glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
   glViewport(0, 0, fbWidth, fbHeight);
 
-  // configure global opengl state
-  // glEnable(GL_DEPTH_TEST);
+  glEnable(GL_DEPTH_TEST);
 
   // build and compile shaders
   const std::string shader_path{PROJECT_DIR};
-  std::cout << shader_path << '\n';
   Shader shader{(shader_path + "/src/shaders/shader.vert").c_str(),
                 (shader_path + "/src/shaders/" + MODE + ".frag").c_str()};
 
@@ -78,9 +76,8 @@ int main() {
 
   // activate shaders & set uniforms
   shader.use();
-  constexpr float aspect_ratio{static_cast<float>(conf::kWidth) /
-                               static_cast<float>(conf::kHeight)};
-  shader.setFloat("aspect_ratio", aspect_ratio);
+  constexpr float aspect_ratio{static_cast<float>(conf::kScrWidth) /
+                               static_cast<float>(conf::kScrHeight)};
   shader.setInt("max_iter", conf::kMaxIteration);
   shader.setFloat("zoom", zoom);
   shader.setVec2("center", CENTER);
@@ -96,10 +93,19 @@ int main() {
 
     // clear screen & set background color
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    shader.use();
+
+    glm::mat4 model{1.0f};
+    glm::mat4 view{1.0f};
+    glm::mat4 projection{glm::ortho(0.0f, conf::kGameWidthf, conf::kGameHeightf,
+                                    0.0f, -1.0f, 1.0f)};
+    shader.setMat4("model", model);
+    shader.setMat4("view", view);
+    shader.setMat4("projection", projection);
 
     // activate shaders & update uniforms
-    shader.use();
     // zoom *= std::exp(deltaTime * ZOOM_SPEED);
     // ourShader.setFloat("zoom", zoom);
 

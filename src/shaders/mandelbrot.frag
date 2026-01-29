@@ -6,10 +6,6 @@ out vec4 FragColor;
 
 uniform int max_iter;
 
-float norm(vec2 c) {
-    return c.x * c.x + c.y * c.y;
-}
-
 vec2 mult(vec2 v1, vec2 v2) {
     return vec2(
         v1.x * v2.x - v1.y * v2.y, // Real part
@@ -17,16 +13,12 @@ vec2 mult(vec2 v1, vec2 v2) {
     );
 }
 
-vec2 add(vec2 v1, vec2 v2) {
-    return vec2(v1.x + v2.x, v1.y + v2.y);
-}
-
 int compute_iterations(vec2 c) {
     vec2 z = vec2(0.0f, 0.0f);
     int iteration = 0;
 
-    while (norm(z) < 4.0f && iteration < max_iter) {
-        z = add(mult(z, z), c);
+    while (dot(z, z) < 4.0f && iteration < max_iter) {
+        z = mult(z, z) + c;
         ++iteration;
     }
 
@@ -38,5 +30,6 @@ void main()
     int iter = compute_iterations(FracCoord);
 
     float val = float(iter) / float(max_iter);
-    FragColor = vec4(val, val, val, 1.0);
+
+    FragColor = vec4(vec3(val), 1.0);
 }

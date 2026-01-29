@@ -4,9 +4,13 @@
 #include <glm/vec2.hpp>
 
 namespace conf {
-inline constexpr unsigned int kWidth{800};
-inline constexpr unsigned int kHeight{600};
+inline constexpr unsigned int kScrWidth{800};
+inline constexpr unsigned int kScrHeight{600};
 inline constexpr unsigned int kMaxIteration{100};
+inline constexpr int kGameWidth{10};
+inline constexpr int kGameHeight{10};
+inline constexpr float kGameWidthf{static_cast<float>(kGameWidth)};
+inline constexpr float kGameHeightf{static_cast<float>(kGameHeight)};
 } // namespace conf
 
 #endif

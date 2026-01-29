@@ -1,6 +1,7 @@
 #ifndef CANVAS_H_
 #define CANVAS_H_
 
+#include "configuration.h"
 #include <glad/glad.h>
 
 class Canvas {
@@ -12,12 +13,15 @@ public:
 
 private:
   static constexpr float m_vertices[]{
-      1.0f,  1.0f,  // top right
-      1.0f,  -1.0f, // bottom right
-      -1.0f, 1.0f,  // top left
-      -1.0f, -1.0f, // bottom left
-      -1.0f, 1.0f,  // top left
-      1.0f,  -1.0f, // bottom right
+      // First triangle
+      conf::kGameWidthf, 0.0f,               // top right
+      conf::kGameWidthf, conf::kGameHeightf, // bottom right
+      0.0f, 0.0f,                            // top left
+
+      // Second triangle
+      0.0f, 0.0f,                            // top left
+      conf::kGameWidthf, conf::kGameHeightf, // bottom right
+      0.0f, conf::kGameHeightf               // bottom left
   };
   GLuint m_VAO{};
   GLuint m_VBO{};
