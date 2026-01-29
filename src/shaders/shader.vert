@@ -16,5 +16,5 @@ void main()
     gl_Position = projection * view * model * vec4(aPos, 0.0f, 1.0f);
 
     vec2 ndc = gl_Position.xy / gl_Position.w;
-    FracCoord  = ndc * vec2(1.75, 1.25) + vec2(-0.5, 0.0);
+    FracCoord  = (ndc * vec2(1.75, 1.25) / zoom) + center; 
 }

@@ -33,6 +33,7 @@ include_directories(
 set(SOURCE_FILES
   src/main.cpp
   src/canvas.cpp
+  src/fractals.cpp
   src/glad.c
 )
 
