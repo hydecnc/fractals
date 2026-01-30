@@ -62,15 +62,19 @@ void EventHandler::handleKeyPress(const int key, const int scancode,
   if (action == GLFW_PRESS) {
     switch (key) {
     case GLFW_KEY_H:
+    case GLFW_KEY_LEFT:
       panScreen(conf::kKeyPressMoveAmount, 0.0);
       break;
     case GLFW_KEY_J:
+    case GLFW_KEY_DOWN:
       panScreen(0.0, -conf::kKeyPressMoveAmount);
       break;
     case GLFW_KEY_K:
+    case GLFW_KEY_UP:
       panScreen(0.0, conf::kKeyPressMoveAmount);
       break;
     case GLFW_KEY_L:
+    case GLFW_KEY_RIGHT:
       panScreen(-conf::kKeyPressMoveAmount, 0.0);
       break;
     case GLFW_KEY_EQUAL:
