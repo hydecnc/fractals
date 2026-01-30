@@ -16,23 +16,32 @@ vec2 mult(vec2 v1, vec2 v2) {
     );
 }
 
-int compute_iterations(vec2 c) {
-    vec2 z = vec2(0.0f, 0.0f);
-    int iteration = 0;
+float compute_iterations(vec2 c) {
+    const float B = 256.0f;
+    float n = 0.0f;
+    vec2 z = vec2(0.0f);
 
-    while (dot(z, z) < 4.0f && iteration < max_iter) {
+    for (int i = 0; i < max_iter; i++) {
         z = mult(z, z) + c;
-        ++iteration;
+        if (dot(z, z) > B * B) break;
+        n += 1.0f;
     }
+    // while (dot(z, z) < 4.0f && iteration < max_iter) {
+    //     z = mult(z, z) + c;
+    //     iteration += 1.0f;
+    // }
 
-    return iteration;
+    float sn = n - log2(log2(dot(z,z))) + 4.0;
+    return sn;
 }
 
 void main()
 {
-    int iter = compute_iterations(FracCoord);
+    float iter = compute_iterations(FracCoord);
 
-    float val = float(iter) / float(max_iter);
+    // float val = float(iter) / float(max_iter);
+    vec3 col = (iter<0.5) ? vec3(0.0,0.0,0.0) : 
+        0.5 + 0.5*cos( 3.0 + iter*0.15 + vec3(0.0,0.8,0.4));
 
-    FragColor = vec4(vec3(val), 1.0);
+    FragColor = vec4(col, 1.0);
 }

@@ -16,3 +16,7 @@ You can zoom into the fractal by scrolling and view different parts of the fract
 | j / Right Arrow | Pan Right |
 | =               | Zoom In   |
 | -               | Zoom Out  |
+
+## Coloring
+
+Smooth coloring was implemented following [this blog](https://iquilezles.org/articles/msetsmooth/) written by Inigo Quilez.
