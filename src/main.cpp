@@ -27,7 +27,7 @@ int main() {
     fractal_display.clearScreen();
     fractal_display.setUniforms(shader);
     fractal_display.drawFractals();
-    handler.handleEvents();
+    handler.checkEvents();
   }
 
   glfwTerminate();

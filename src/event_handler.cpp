@@ -13,9 +13,10 @@ EventHandler::EventHandler(AppState &appstate, GLFWwindow *window)
   glfwSetScrollCallback(window, EventCallback::scroll_callback);
   glfwSetCursorPosCallback(window, EventCallback::cursor_pos_callback);
   glfwSetMouseButtonCallback(window, EventCallback::mouse_button_callback);
+  glfwSetKeyCallback(window, EventCallback::key_callback);
 }
 
-void EventHandler::handleEvents() const { glfwPollEvents(); }
+void EventHandler::checkEvents() const { glfwPollEvents(); }
 
 void EventHandler::zoomInOut(const double yoffset) {
   m_appstate.zoom_scale *= pow(conf::kScrollSpeed, yoffset);
@@ -56,6 +57,32 @@ void EventHandler::handleMouseMove(const double xpos, const double ypos) {
   }
 }
 
+void EventHandler::handleKeyPress(const int key, const int scancode,
+                                  const int action, const int mods) {
+  if (action == GLFW_PRESS) {
+    switch (key) {
+    case GLFW_KEY_H:
+      panScreen(conf::kKeyPressMoveAmount, 0.0);
+      break;
+    case GLFW_KEY_J:
+      panScreen(0.0, -conf::kKeyPressMoveAmount);
+      break;
+    case GLFW_KEY_K:
+      panScreen(0.0, conf::kKeyPressMoveAmount);
+      break;
+    case GLFW_KEY_L:
+      panScreen(-conf::kKeyPressMoveAmount, 0.0);
+      break;
+    case GLFW_KEY_EQUAL:
+      zoomInOut(1.0);
+      break;
+    case GLFW_KEY_MINUS:
+      zoomInOut(-1.0);
+      break;
+    }
+  }
+}
+
 void EventCallback::framebuffer_size_callback(GLFWwindow *window, int width,
                                               int height) {
   EventHandler *handler{
@@ -83,4 +110,11 @@ void EventCallback::mouse_button_callback(GLFWwindow *window, int button,
   EventHandler *handler{
       reinterpret_cast<EventHandler *>(glfwGetWindowUserPointer(window))};
   handler->handleMouseButton(window, button, action, mods);
+}
+
+void EventCallback::key_callback(GLFWwindow *window, int key, int scancode,
+                                 int action, int mods) {
+  EventHandler *handler{
+      reinterpret_cast<EventHandler *>(glfwGetWindowUserPointer(window))};
+  handler->handleKeyPress(key, scancode, action, mods);
 }
