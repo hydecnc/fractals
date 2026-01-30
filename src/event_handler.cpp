@@ -1,6 +1,4 @@
 #include "event_handler.h"
-#include "GLFW/glfw3.h"
-#include "configuration.h"
 
 EventHandler::EventHandler(AppState &appstate, GLFWwindow *window)
     : m_appstate{appstate} {

@@ -1,9 +1,5 @@
 #include "fractals.h"
-#include "configuration.h"
 #include "glm/ext/matrix_clip_space.hpp"
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
-#include <iostream>
 
 FractalDisplay::FractalDisplay(const AppState &state) : m_state{state} {}
 
@@ -66,11 +62,6 @@ void FractalDisplay::clearScreen() const {
 }
 
 void FractalDisplay::drawFractals() const {
-  // per-frame time logic
-  // float currentFrame{static_cast<float>(glfwGetTime())};
-  // float deltaTime = currentFrame - lastFrame;
-  // float lastFrame = currentFrame;
-
   m_canvas.draw();
 
   glfwSwapBuffers(m_window);

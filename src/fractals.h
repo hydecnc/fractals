@@ -1,13 +1,10 @@
 #ifndef FRACTALS_H_
 #define FRACTALS_H_
 
-// clang-format off
 #include "canvas.h"
 #include "shader_s.h"
 #include "state.h"
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
-// clang-format on
 
 class FractalDisplay {
 public:
