@@ -6,7 +6,7 @@
 
 struct AppState {
   glm::vec2 zoom_center{conf::kFractalCenter};
-  float zoom_scale{1.0f};
+  float zoom_scale{2.0f};
 };
 
 #endif
