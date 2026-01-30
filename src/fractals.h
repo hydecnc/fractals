@@ -1,3 +1,6 @@
+#ifndef FRACTALS_H_
+#define FRACTALS_H_
+
 // clang-format off
 #include "canvas.h"
 #include "shader_s.h"
@@ -23,7 +26,7 @@ private:
   Canvas m_canvas{};
   const AppState &m_state{};
 
-  float m_zoom{1.0f};
-
   void setViewport();
 };
+
+#endif

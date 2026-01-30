@@ -34,6 +34,7 @@ set(SOURCE_FILES
   src/main.cpp
   src/canvas.cpp
   src/fractals.cpp
+  src/event_handler.cpp
   src/glad.c
 )
 

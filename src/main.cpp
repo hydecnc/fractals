@@ -1,11 +1,12 @@
 // clang-format off
+#include "state.h"
 #include "canvas.h"
-#include "glm/ext/matrix_clip_space.hpp"
 #include "shader_s.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "configuration.h"
 #include "fractals.h"
+#include "event_handler.h"
 
 #include <glm/fwd.hpp>
 #include <iostream>
@@ -40,10 +41,11 @@ int main() {
   FractalDisplay fractal_display{state};
   fractal_display.init();
 
-  glfwSetFramebufferSizeCallback(fractal_display.window(),
-                                 framebuffer_size_callback);
-  glfwSetScrollCallback(fractal_display.window(), scroll_callback);
-  glfwSetCursorPosCallback(fractal_display.window(), mouse_callback);
+  EventHandler handler{state, fractal_display.window()};
+  // glfwSetFramebufferSizeCallback(fractal_display.window(),
+  //                                framebuffer_size_callback);
+  // glfwSetScrollCallback(fractal_display.window(), scroll_callback);
+  // glfwSetCursorPosCallback(fractal_display.window(), mouse_callback);
 
   const std::string shader_path{PROJECT_DIR};
   Shader shader{(shader_path + "/src/shaders/shader.vert").c_str(),
@@ -54,7 +56,7 @@ int main() {
     fractal_display.clearScreen();
     fractal_display.setUniforms(shader);
     fractal_display.drawFractals();
-    glfwPollEvents();
+    handler.handleEvents();
   }
 
   glfwTerminate();

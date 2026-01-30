@@ -57,7 +57,7 @@ void FractalDisplay::setUniforms(const Shader &shader) const {
   shader.setMat4("projection", projection);
 
   shader.setVec2("center", m_state.zoom_center);
-  shader.setFloat("zoom", m_zoom);
+  shader.setFloat("zoom", m_state.zoom_scale);
 }
 
 void FractalDisplay::clearScreen() const {
