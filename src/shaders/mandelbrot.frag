@@ -26,10 +26,6 @@ float compute_iterations(vec2 c) {
         if (dot(z, z) > B * B) break;
         n += 1.0f;
     }
-    // while (dot(z, z) < 4.0f && iteration < max_iter) {
-    //     z = mult(z, z) + c;
-    //     iteration += 1.0f;
-    // }
 
     float sn = n - log2(log2(dot(z,z))) + 4.0;
     return sn;
@@ -39,9 +35,8 @@ void main()
 {
     float iter = compute_iterations(FracCoord);
 
-    // float val = float(iter) / float(max_iter);
-    vec3 col = (iter<0.5) ? vec3(0.0,0.0,0.0) : 
-        0.5 + 0.5*cos( 3.0 + iter*0.15 + vec3(0.0,0.8,0.4));
+    vec3 col = (iter < 0.5) ? vec3(0.0,0.0,0.0) : 
+        0.5 + 0.5 * cos( 3.0 + iter * 0.15 + vec3(0.2, 0.8, 0.4));
 
     FragColor = vec4(col, 1.0);
 }
