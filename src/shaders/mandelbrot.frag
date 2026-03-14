@@ -44,7 +44,7 @@ float compute_iterations_ref(vec2 dc) {
         if (dot(orbit[i + 1] + dz, orbit[i + 1] + dz) > B * B) break;
     }
     if (i == max_iter || i + 1 == orbit.length())
-        return 0.5f;
+        return 0.0f;
     float sn = float(i) - log2(log2(dot(orbit[i] + dz, orbit[i] + dz))) + 4.0;
     return sn;
 }
