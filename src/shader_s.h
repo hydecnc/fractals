@@ -1,3 +1,9 @@
+/*
+ * The code below was adapted from learnopengl.com by Joey de Vries.
+ * Support for geometry shader has been removed.
+ * See the original code at:
+ * https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/shader_s.h
+ */
 #ifndef SHADER_H
 #define SHADER_H
 
