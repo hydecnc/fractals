@@ -1,4 +1,4 @@
-# Mandelbrot & Julia Fractals Explorer
+# Mandelbrot Fractals Explorer
 
 Fast Fractals Explorer created with [glfw](https://github.com/glfw/glfw) and OpenGL. For a more detailed explanation on implementation, see [notes](./notes.pdf).
 
