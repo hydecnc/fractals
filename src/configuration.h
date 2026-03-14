@@ -15,7 +15,7 @@ inline constexpr glm::vec2 kFractalCenter{-0.5f, 0.0f};
 inline constexpr float kScrollSpeed{1.3f};
 inline constexpr double kKeyPressMoveAmount{10.0};
 inline constexpr float kInitialZoom{1.0f};
-inline constexpr float kMaxZoomScale{10000.0f};
+inline constexpr float kMaxZoomScale{3e13f};
 inline constexpr float kMinZoomScale{0.1f};
 inline constexpr float kPanSensitivity{0.01f};
 } // namespace conf
