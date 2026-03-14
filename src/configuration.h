@@ -1,7 +1,7 @@
 #ifndef CONFIGURATION_H_
 #define CONFIGURATION_H_
 
-#include <glm/vec2.hpp>
+#include <complex>
 
 namespace conf {
 inline constexpr unsigned int kScrWidth{800};
@@ -11,7 +11,7 @@ inline constexpr int kGameWidth{10};
 inline constexpr int kGameHeight{10};
 inline constexpr float kGameWidthf{static_cast<float>(kGameWidth)};
 inline constexpr float kGameHeightf{static_cast<float>(kGameHeight)};
-inline constexpr glm::vec2 kFractalCenter{-0.5f, 0.0f};
+inline constexpr std::complex<float> kFractalCenter{-0.5f, 0.0f};
 inline constexpr float kFractalExitBoundary{256.0f * 256.0f};
 inline constexpr float kScrollSpeed{1.3f};
 inline constexpr double kKeyPressMoveAmount{10.0};

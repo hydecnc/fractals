@@ -25,10 +25,14 @@ void EventHandler::zoomInOut(const double yoffset) {
 }
 
 void EventHandler::panScreen(const double deltaX, const double deltaY) {
-  m_appstate.zoom_center.x -=
-      deltaX * conf::kPanSensitivity / m_appstate.zoom_scale;
-  m_appstate.zoom_center.y +=
-      deltaY * conf::kPanSensitivity / m_appstate.zoom_scale;
+  const std::complex<float> shift_amt{
+      -static_cast<float>(deltaX) * conf::kPanSensitivity /
+          m_appstate.zoom_scale,
+      static_cast<float>(deltaY) * conf::kPanSensitivity /
+          m_appstate.zoom_scale,
+  };
+  m_appstate.zoom_center += shift_amt;
+  m_appstate.center_changed = true;
 }
 
 void EventHandler::handleMouseButton(GLFWwindow *window, const int button,

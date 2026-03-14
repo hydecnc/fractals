@@ -1,13 +1,17 @@
 // FRAGMENT SHADER
-#version 330 core
+#version 460 core
 
-precision highp float;
+precision mediump float;
 
 in vec2 FracCoord;
-
 out vec4 FragColor;
 
 uniform int max_iter;
+uniform vec2 center;
+
+layout(std430, binding = 0) readonly buffer ReferenceOrbit {
+  vec2 orbit[];
+};
 
 vec2 mult(vec2 v1, vec2 v2) {
     return vec2(
@@ -31,9 +35,24 @@ float compute_iterations(vec2 c) {
     return sn;
 }
 
+float compute_iterations_ref(vec2 dc) {
+    const float B = 256.0f;
+    vec2 dz = vec2(0.0f);
+    int i = 0;
+    for (i = 0; i < max_iter && i < orbit.length() - 1; i++) {
+        dz = 2.0f * mult(orbit[i], dz) + mult(dz, dz) + dc;
+        if (dot(orbit[i + 1] + dz, orbit[i + 1] + dz) > B * B) break;
+    }
+    if (i == max_iter || i + 1 == orbit.length())
+        return 0.5f;
+    float sn = float(i) - log2(log2(dot(orbit[i] + dz, orbit[i] + dz))) + 4.0;
+    return sn;
+}
+
 void main()
 {
-    float iter = compute_iterations(FracCoord);
+    float iter = compute_iterations_ref(FracCoord);
+    // float iter = compute_iterations(FracCoord + center);
 
     vec3 col = (iter < 0.5) ? vec3(0.0,0.0,0.0) : 
         0.5 + 0.5 * cos( 3.0 + iter * 0.15 + vec3(0.2, 0.8, 0.4));

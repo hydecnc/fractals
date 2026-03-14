@@ -1,5 +1,9 @@
 #include "fractals.h"
-#include "glm/ext/matrix_clip_space.hpp"
+#include <complex>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/vec2.hpp>
+
+namespace {} // namespace
 
 FractalDisplay::FractalDisplay(const AppState &state) : m_state{state} {}
 
@@ -13,8 +17,8 @@ int FractalDisplay::init() {
   // glfw initialization
   glfwInit();
   glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   // window setup
@@ -52,7 +56,8 @@ void FractalDisplay::setUniforms(const Shader &shader) const {
   shader.setMat4("view", view);
   shader.setMat4("projection", projection);
 
-  shader.setVec2("center", m_state.zoom_center);
+  shader.setVec2("center",
+                 {m_state.zoom_center.real(), m_state.zoom_center.imag()});
   shader.setFloat("zoom", m_state.zoom_scale);
 }
 
