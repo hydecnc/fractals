@@ -52,8 +52,6 @@ float compute_iterations_ref(vec2 dc) {
             reference_iter = 0;
         }
     }
-    // if (iter == max_reference_iter)
-    //     return 0.0f;
     float sn = float(iter) - log2(log2(dot(orbit[iter] + dz, orbit[iter] + dz))) + 4.0;
     return sn;
 }

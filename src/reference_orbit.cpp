@@ -12,17 +12,15 @@ std::vector<std::complex<float>> ReferenceOrbit::reference_orbit() const {
   return m_orbit;
 }
 
-void ReferenceOrbit::update_reference(const std::complex<float> &center) {
-  std::cout << "recalculating orbit with center " << center << "\n";
+void ReferenceOrbit::update_reference(const std::complex<double> &center) {
   calculate_reference(center);
-  std::cout << "orbit length: " << m_orbit.size() << "\n";
   glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_ssbo);
   glBufferData(GL_SHADER_STORAGE_BUFFER,
                m_orbit.size() * sizeof(std::complex<float>), m_orbit.data(),
                GL_DYNAMIC_DRAW);
 }
 
-void ReferenceOrbit::calculate_reference(const std::complex<float> &center) {
+void ReferenceOrbit::calculate_reference(const std::complex<double> &center) {
   m_orbit.clear();
 
   std::complex<long double> z{0};

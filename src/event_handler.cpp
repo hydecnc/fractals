@@ -3,6 +3,7 @@
 #include "configuration.h"
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 EventHandler::EventHandler(AppState &appstate, GLFWwindow *window)
     : m_appstate{appstate} {
@@ -22,13 +23,14 @@ void EventHandler::zoomInOut(const double yoffset) {
   m_appstate.zoom_scale *= pow(conf::kScrollSpeed, yoffset);
   m_appstate.zoom_scale = std::clamp(m_appstate.zoom_scale, conf::kMinZoomScale,
                                      conf::kMaxZoomScale);
+  std::cout << "Zoom level: " << 3.5 / m_appstate.zoom_scale << '\n';
 }
 
 void EventHandler::panScreen(const double deltaX, const double deltaY) {
-  const std::complex<float> shift_amt{
-      -static_cast<float>(deltaX) * conf::kPanSensitivity /
+  const std::complex<double> shift_amt{
+      -deltaX * static_cast<double>(conf::kPanSensitivity) /
           m_appstate.zoom_scale,
-      static_cast<float>(deltaY) * conf::kPanSensitivity /
+      deltaY * static_cast<double>(conf::kPanSensitivity) /
           m_appstate.zoom_scale,
   };
   m_appstate.zoom_center += shift_amt;
