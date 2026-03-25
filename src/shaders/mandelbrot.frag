@@ -38,14 +38,23 @@ float compute_iterations(vec2 c) {
 float compute_iterations_ref(vec2 dc) {
     const float B = 256.0f;
     vec2 dz = vec2(0.0f);
-    int i = 0;
-    for (i = 0; i < max_iter && i < orbit.length() - 1; i++) {
-        dz = 2.0f * mult(orbit[i], dz) + mult(dz, dz) + dc;
-        if (dot(orbit[i + 1] + dz, orbit[i + 1] + dz) > B * B) break;
+    int iter;
+    int reference_iter = 0;
+    int max_reference_iter = orbit.length();
+    for (iter = 0; iter < max_iter; iter++) {
+        dz = 2.0f * mult(orbit[reference_iter], dz) + mult(dz, dz) + dc;
+        reference_iter++;
+
+        vec2 z = orbit[reference_iter] + dz;
+        if (dot(z, z) > B * B) break;
+        if (dot(z, z) < dot(dz, dz) || reference_iter == max_reference_iter) {
+            dz = z;
+            reference_iter = 0;
+        }
     }
-    if (i == max_iter || i + 1 == orbit.length())
-        return 0.0f;
-    float sn = float(i) - log2(log2(dot(orbit[i] + dz, orbit[i] + dz))) + 4.0;
+    // if (iter == max_reference_iter)
+    //     return 0.0f;
+    float sn = float(iter) - log2(log2(dot(orbit[iter] + dz, orbit[iter] + dz))) + 4.0;
     return sn;
 }
 
