@@ -107,7 +107,7 @@ The idea is:
 
 We can calculate reference orbits like following:
 ```cpp
-void ReferenceOrbit::calculate_reference(const std::complex<float> &center) {
+void ReferenceOrbit::calculate_reference(const std::complex<double> &center) {
   // Remove previous orbit values
   orbit.clear();
 
@@ -151,3 +151,31 @@ A bunch of delta orbit can have the same iteration count when the reference orbi
   image("pictures/color_clump_perturbation.png", width: 40%),
   caption: [Color clumps originating from many delta orbit with the same iteration count.],
 )
+
+Of course, if we face such situation, we can choose a new (hopefully better) reference orbit and recalculate the delta orbit.
+
+#link("https://fractalforums.org/index.php?topic=4360.0", [Zhuoran from fractal forums]) suggested the following approach, which actually avoids the need to choose a new reference orbit:
+
+```glsl
+float compute_iterations_ref(vec2 dc) {
+    const float B = 256.0f;
+    vec2 dz = vec2(0.0f);
+    int iter;
+    int reference_iter = 0;
+    int max_reference_iter = orbit.length();
+    for (iter = 0; iter < max_iter; iter++) {
+        dz = 2.0f * mult(orbit[reference_iter], dz) + mult(dz, dz) + dc;
+        reference_iter++;
+
+        vec2 z = orbit[reference_iter] + dz;
+        if (dot(z, z) > B * B) break;
+        if (dot(z, z) < dot(dz, dz) || reference_iter == max_reference_iter) {
+            dz = z;
+            reference_iter = 0;
+        }
+    }
+    float sn = float(iter) - log2(log2(dot(orbit[iter] + dz, orbit[iter] + dz))) + 4.0;
+    return sn;
+}
+```
+
